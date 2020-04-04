@@ -6,17 +6,22 @@
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 
     <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <link rel="stylesheet" href="../lib/my.css">
     <script src="https://unpkg.com/element-ui/lib/index.js"></script>
     <title>普通用户登录</title>
 </head>
 
 <body>
-    <div id="content">
+<noscript>
+    <strong>We're sorry but <%= htmlWebpackPlugin.options.title %> doesn't work properly without JavaScript enabled.
+        Please enable it to continue.</strong>
+</noscript>
+    <div id="app">
         <h2>普通用户登录</h2>
-        <login :option="option" @submit="submit" @send="send"></login>
+        <login :option="option" @refresh="refresh" @submit="submit"></login>
         <hr />
         <h2>手机号登陆</h2>
-        <login :option1="option1" @submit="submit" @send="send"></login>
+        <login :option="option1" @submit="submit" @send="send"></login>
         <hr />
     </div>
 </body>
@@ -33,7 +38,7 @@
                  LoginName: {
                   label: "用户名",
                   placeholder: "请输入用户名",
-                  autocomplete: "off"
+                  autocomplete: "on"
                  },
                  LoginPassword: {
                   label: "密码",
@@ -41,12 +46,16 @@
                   autocomplete: "off"
                 },
                   LoginIdentify: {
-                    hide: true
+                    label: '验证码',
+                    height: 40,
+                    autocomplete: 'off',
                 }
+            }
              }, 
              option1: {
                   width: 400,
                   time: 60,
+                  codeSrc: '',
                   codeType: 'phone',
                   column: {
                   LoginName: {
@@ -64,7 +73,6 @@
                     }
                     }
                 }
-            }
         }
     },
     created() {
@@ -72,7 +80,9 @@
         },
     methods: {
         refresh() {
-                this.option.codeSrc = "https://pigx.pig4cloud.com/code?randomStr=" + new Date().getTime();
+            this.$message.success('图片验证码刷新成功')
+            this.option.codeSrc = "https://pigx.pig4cloud.com/code?randomStr=" + new Date().getTime();
+                this.option1.codeSrc = "https://pigx.pig4cloud.com/code?randomStr=" + new Date().getTime();
             },
             send(done) {
                 this.$message.success('验证码发送成功')

@@ -3,10 +3,9 @@
     <el-form
       :rules="LoginFormRules"
       ref="form"
-      :model="loginForm"
+      :model="LoginForm"
       label-position="right"
       label-width="auto"
-      show-message
     >
       <el-form-item
         :label="this.LoginName.label || '用户名'"
@@ -30,6 +29,7 @@
           type="password"
           prefix-icon="el-icon-unlock"
           v-model="LoginForm.LoginPassword"
+          show-password
           :autocomplete="this.LoginPassword.autocomplete"
           :placeholder="this.LoginPassword.placeholder || '请输入密码'"
         ></el-input>
@@ -47,7 +47,8 @@
           :autocomplete="this.LoginIdentify.autocomplete"
           :placeholder="this.LoginIdentify.placeholder || '请输入验证码'"
         >
-          <template slot="append">
+          <template slot="append"
+            ><!--具名slot-->
             <el-button
               type="primary"
               v-if="this.isPhone"
@@ -164,6 +165,7 @@ export default create({
     onRefresh: function() {
       this.$emit("refresh");
     },
+    //返回表单中的数据
     onSubmit: function() {
       const onCover = () => {
         const form = {};
@@ -176,6 +178,7 @@ export default create({
         }
         return form;
       };
+      //验证数据的合法性
       this.$refs.form.validate(valid => {
         if (valid) {
           this.$emit("submit", onCover());
